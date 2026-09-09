@@ -10,5 +10,109 @@ body {
     flex-direction: column;
     margin: 1.5em;
     padding: 2em;
+     justify-content: center;
+     align-items: center;
     background-image: url('../img/fondo\ con\ blanco\ y\ negro.png');
+}
+
+/* contenedor principal */
+#contenedor {
+  background-color: rgba(255,255,255,0.85);
+  text-align: center;
+  font-family: "Alice", serif;
+  font-size: 1.2rem;
+}
+/* Header */
+header {
+  font-family: "Alice", serif;
+  background-color: rgba(255,255,255,0.85);
+  text-align: center;
+  padding: 2em;
+  position: sticky;
+}
+header h1 {
+  font-family: "Alice", serif;    
+  color: #b91806;
+  margin-bottom: 2em;
+  font-size: 1.8rem;
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+ gap: 0.6em;
+  padding: 0.8em 1em;
+  /*background-color: rgba(244, 123, 123, 0.959);*/
+    background-color:  #901105;
+}
+nav a {
+  text-decoration: none;
+  color: rgb(151, 22, 22); 
+  font-weight: bold;
+  font-size: 0.9em;   
+  display: inline-block;
+   padding: 0.5em 1.4em;
+  background-color: #d89f99;
+  /*background-color: #e65454;*/
+  border-radius: 50px;
+   border: 1px solid #a07e0c;
+   white-space: nowrap;
+}
+nav a:hover {
+  color: #000
+}
+/* Contenido */
+main {
+  max-width: 90%;
+  margin: 3.1em auto;
+  padding: 2em;
+  background-color: rgba(255, 255, 255, 0.926);
+  border-radius: 0.9em;
+  text-align: center;
+  flex: 1; 
+}
+
+h2 {
+  font-size: 1.5em;    
+  font-family: "Alice", serif;
+  margin-bottom: 1em;
+  color: #2c3e50;
+}
+.contenedor-juego {
+  width: 30%;
+  min-width: 200px;
+  box-sizing: border-box;
+}
+.contenedor-juego img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.5em;
+}
+.contenedor-juego h4 {
+  margin-top: 0.5em;
+}
+.fila-juegos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  gap: 2em;
+}
+.contenedor-juego {
+  width: 30%;
+  min-width: 200px;
+  box-sizing: border-box;
+}
+/* Footer */
+footer {
+  text-align: center;
+  margin: 20px 0;      
+  padding: 5px;
+  font-size: 1em;
+  color: rgb(151, 22, 22); 
+  background-color: rgba(243, 194, 194, 0.959);
 }
