@@ -1,6 +1,6 @@
-# Trabajo-Pr-ctico-1
+# Trabajo Practico 1
 Nombre del proyecto:Acertijos, cartas y magia
-Integrantes: Ayeles Juarez y Nadia Bracco.
+Integrantes: Ayelen Juarez y Nadia Bracco.
 Datos de la materia
 Materia: Informática General
 Institución: UNA (Universidad Nacional de las Artes)
