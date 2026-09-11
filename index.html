@@ -1,81 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>¡Que empiece el juego!</title>
-  <link rel="stylesheet" href="./css/archivo.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div id="contenedor">
-       <header>
-      <h1>Trivia, cartas 🃏 y magia 🔮: ¡que empiece el juego!</h1>
-      <h2>
-        "Has atravesado el umbral de las maravillas… y el juego está por comenzar.  
-        ¿Estás list@ para dejarte llevar por la magia?"
-      </h2>
-
-      <nav>
-        <ul>
-          <li><a class="menu" href="index.html">Página Principal</a></li>
-          <li><a class="menu" href="cartas.html">Juego de cartas</a></li>
-          <li><a class="menu" href="dados.html">Juego de Dados</a></li>
-          <li><a class="menu" href="preguntas.html">Preguntas y Respuestas</a></li>
-          <li><a class="menu" href="tabla.html">Tabla de Posiciones</a></li>
-          <li><a class="menu" href="info.html">Sobre las Creadoras</a></li>     
-        </ul>
-      </nav>
-    </header>
-
-    <!-- Contenido principal -->
-    <main>
-      <h2>Bienvenid@, jugador/a de las maravillas</h2>
-            <!-- Formulario de nombre -->
-     <div id="saludo">
-       <h2> Hola <div id="nombreimpreso"></div></h2>
-       <p><strong> Bienvenid@ a la pagina web del pais de las maravillas</strong> </p>
-     </div>
-      <h2>“Cartas traviesas, dados parlanchines y preguntas caprichosas te esperan…”</h2>
-      <div class="fila-juegos">
-      <div class="contenedor-juego">
-        <img src="imagenes/reina de corazones.png" alt="Carta Reina de corazones">
-        <h3>Cartas</h3>
-      </div>
-      <div class="contenedor-juego">
-        <img src="imagenes/sombrerero.png" alt="sombrerero">
-       <h3>Dados</h3>
-      </div>
-      <div class="contenedor-juego">
-        <img src="imagenes/conejo.png" alt="conejo blancocon reloj de bolsillo">
-        <h3>Preguntas y Respuestas</h3>
-      </div>
+  <head>
+    <meta charset="UTF-8">
+    <title>Wonderland Juegos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="css/estilos.css">
+  </head>
+  <body>
+    <div id="contenedor">
+      <header>
+        <h1>Wonderland Juegos</h1>
+        <h2>Caíste por la madriguera del conejo y llegaste a un lugar donde nada es lo que parece...</h2>
+        <nav>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="cartas.html">Juego de cartas</a></li>
+            <li><a href="dados.html">Juego de Dados</a></li>
+            <li><a href="preguntas.html">Juego de trivia</a></li>
+            <li><a href="tabla.html">Tabla de Posiciones</a></li>
+            <li><a href="info.html">Información</a></li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <div id="saludo"> <!-- Formulario de nombre -->
+          <h2> ¡Bienvenid@ <div id="nombreimpreso"></div> a Wonderland Juegos!</h2>
         </div>
-      <div>
-        <p><strong>
-          “También podrás espiar tu puntaje y compararlo con l@s demás en la mágica tabla de posiciones.
-          <br> 
-          Desde el menú podrás saltar entre cartas, dados y trivias como si fueran portales de maravillas.”
-        </p>
-        <p>“El juego está servido, ¡elige tu camino!”</p></strong>
-      </div>
-    </main>
-    <footer>
-      <address>
-        <p>
-          Para contactarse con nosotros escribir a 
-          <a class="mail" href="mailto:arcade@digitaljuegos.com">
-            arcade@digitaljuegos.com
-          </a>
-        </p>
-      </address>
-    </footer>
-
-  </div>
-
-  <!-- Script -->
-  <script src="js/formnombre.js"></script>
-</body>
+        <p>Cartas traviesas, dados parlanchines y preguntas caprichosas te esperan…</p>
+        <div class="fila-juegos">
+          <div class="contenedor-juego">
+            <img src="imagenes/reina de corazones.png" alt="Carta Reina de corazones">
+            <h3>Cartas</h3>
+          </div>
+          <div class="contenedor-juego">
+            <img src="imagenes/sombrerero.jpg" alt="Sombrerero">
+            <h3>Dados</h3>
+          </div>
+          <div class="contenedor-juego">
+            <img src="imagenes/conejo.png" alt="Conejo blanco con reloj">
+            <h3>Preguntas y Respuestas</h3>
+          </div>
+        </div>
+        <p>En este rincón del país de las maravillas te esperan tres desafíos: cartas, dados y trivias. 
+          Desde el menú podrás saltar entre ellos como si fueran portales. Cuando termines de jugar, 
+          podrás espiar tu puntaje y compararlo con l@s demás en la mágica tabla de posiciones. 
+          <br>
+          El juego está servido, ¡elige tu camino!</p>
+        </main>
+        <footer>
+          <address>
+            <p>Para contactarse con nosotros escribir a <a class="mail" href="mailto:arcade@digitaljuegos.com">arcade@digitaljuegos.com</a></p>
+          </address>
+        </footer>
+      </div><!-- Script -->
+    <script src="js/formnombre.js"></script>
+  </body>
 </html>

@@ -1,10 +1,14 @@
-.alice-regular {
+* {
+  box-sizing: border-box; } /*para respetar mejor el tamaño de las columnas*/ 
+
+/*
+.alice-regular {         preguntar a nadia para que va usar esto? 
   font-family: "Alice", serif;
   font-weight: 400;
   font-style: normal;
 }
 
-/* Fondo */
+/*
 body {
     display: flex; 
     flex-direction: column;
@@ -12,24 +16,42 @@ body {
     padding: 2em;
      justify-content: center;
      align-items: center;
-    background-image: url("../imagenes/fondo\ con\ blanco\ y\ negro.png")
+    background-image: url("../imagenes/fondo.jpg");
 }
 
-/* contenedor principal */
+
 #contenedor {
   background-color: rgba(255,255,255,0.85);
   text-align: center;
   font-family: "Alice", serif;
   font-size: 1.2rem;
 }
-/* Header */
-header {
+*/
+
+body {
   font-family: "Alice", serif;
-  background-color: rgba(255,255,255,0.85);
+  margin: 5rem;
+  background-image: url("../imagenes/fondo.jpg");
+  display: flex;
+  justify-content: center;
+}
+
+#contenedor {
+    width: 90%;
+    max-width: 75rem;
+    background-color: #c85e8af4;
+    text-align: center;
+}
+
+
+header {
+  background-color: rgba(255,255,255);
   text-align: center;
   padding: 2em;
-  position: sticky;
+  margin: 1rem; /*separa el header del contenedor para que no este pegado*/
 }
+
+
 header h1 {
   font-family: "Alice", serif;    
   color: #b91806;
@@ -67,7 +89,7 @@ main {
   max-width: 90%;
   margin: 3.1em auto;
   padding: 2em;
-  background-color: rgba(255, 255, 255, 0.926);
+  background-color: rgba(255, 255, 255);
   border-radius: 0.9em;
   text-align: center;
   flex: 1; 
