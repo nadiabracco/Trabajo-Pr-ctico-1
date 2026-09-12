@@ -1,11 +1,10 @@
-//Generar mazo 
+//Genera el mazo de 40 cartas.
 const palos = ["oros", "copas", "espadas", "bastos"];
 const mazo = [];
 
-// Bucle externo: recorre los 4 palos
+//Recorre los 4 palos
 for (let i = 0; i < 4; i++) {
-
-    // Bucle interno: recorre los números del 1 al 10
+ // recorre los números de cada palo 
     for (let j = 1; j <= 10; j++) {
         const carta = {
             palo: palos[i],
@@ -15,20 +14,38 @@ for (let i = 0; i < 4; i++) {
     }
 
 }
-
 console.log("Mazo original:", mazo);
 console.log("Total de cartas: " + mazo.length);
 
-//Mezclar el mazo 
-const cantidadDeCartas = mazo.length; // guardo el 40 fijo, antes de tocar el mazo
+//Mezclar las cartas del mazo en un orden aleatorio.
+const cantidadDeCartas = mazo.length;
 const mazoMezclado = [];
-
 for (let i = 0; i < cantidadDeCartas; i++) {
-    let posicionAzar = Math.floor(Math.random() * mazo.length); // posición random dentro de lo que queda del mazo
-    let cartaSorteada = mazo[posicionAzar];                     // agarro esa carta
-    mazo.splice(posicionAzar, 1);                                // la saco del mazo original
-    mazoMezclado.push(cartaSorteada);                            // la guardo en el mazo mezclado
+    let posicionAzar = Math.floor(Math.random() * mazo.length); 
+    let cartaSorteada = mazo[posicionAzar];                     
+    mazo.splice(posicionAzar, 1);                                
+    mazoMezclado.push(cartaSorteada);                           
 }
-
 console.log("Mazo mezclado:", mazoMezclado);
-console.log("El mazo original ahora tiene:", mazo.length, "cartas"); // debería dar 0
+
+//Puntos de los jugadores/ manos/ descartes de cartas.
+let puntosJugador1 = 0;
+let puntosJugador2 = 0;
+let manoJugador1 = [];
+let manoJugador2 = [];
+let descartes = [];
+
+//Reparte las cartas a los jugadores.
+for (let i = 0; i < 4; i++) {
+    let cartaRepartida = mazoMezclado[0];
+    mazoMezclado.splice(0, 1);
+
+    if (i < 2) {
+        manoJugador1.push(cartaRepartida);
+    } else {
+        manoJugador2.push(cartaRepartida);
+    }
+}
+console.log("Mano Jugador 1:", manoJugador1);
+console.log("Mano Jugador 2:", manoJugador2);
+console.log("Cartas restantes en el mazo:", mazoMezclado.length);
