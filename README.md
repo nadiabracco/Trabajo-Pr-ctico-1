@@ -1,7 +1,7 @@
 # Trabajo Practico 1
-Nombre del proyecto:Acertijos, cartas y magia
+Nombre del proyecto:Wonderland Juegos
 Integrantes: Ayelen Juarez y Nadia Bracco.
-Datos de la materia
+Datos de la materia:
 Materia: Informática General
 Institución: UNA (Universidad Nacional de las Artes)
 Trabajo Práctico: N° 1
@@ -33,3 +33,7 @@ Descripción de las principales funcionalidades:
 -El mazo se mezcla con una funcion que, en cada cada repetición del bucle, genera una posición aleatoria con Math.random(), extrae esa carta del mazo original con splice() y la agrega al nuevo array mazoMezclado, hasta vaciar el mazo original.
 -Se reparten 4 cartas del mazo mezclado: las 2 primeras se asignan a manoJugador1 y las 2 siguientes a manoJugador2, quitándolas del mazo con splice() a medida que se reparten.
 -Se declaran las variables del juego: puntosJugador1, puntosJugador2, manoJugador1, manoJugador2 y el array descartes, donde se guardarán las cartas que se van descartando.
+-Se comprueba si algún jugador tiene un par comparando el número de sus 2 cartas (manoJugador1[0].numero === manoJugador1[1].numero); si coinciden, se suma 1 punto a puntosJugador1 o puntosJugador2 según corresponda.
+Se ajustó la numeración de las cartas para que coincida con la baraja española real (1 al 7, y 10, 11, 12, sin 8 ni 9), usando un array numeros = [1,2,3,4,5,6,7,10,11,12] y accediendo a sus posiciones con numeros[j].
+-Se resolvio cómo descartar y robar cartas cuando no hay par: se saca la primera carta de la mano del jugador con splice(), se agrega al array descartes, y se debería robar una nueva carta del mazoMezclado para reponerla. 
+-Se conecta el juego con el HTML: se selecciona el contenedor <div id="mesaDeJuego"> con document.querySelector(), y se arma, para cada carta, la ruta de su imagen (rutaImagen) y la etiqueta <img> correspondiente (etiquetaImagen), para mostrarlas dentro de ese div con mesaDeJuego.innerHTML += etiquetaImagen.
