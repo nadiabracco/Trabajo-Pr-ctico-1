@@ -69,14 +69,45 @@ for (let i = 0; i < 2; i++) {
     let etiquetaImagen = '<img src="' + rutaImagen + '">';
     mesaDeJuego.innerHTML += etiquetaImagen;
 }
+// Repite cada ronda: comparar, descartar y robar hasta que alguien gane 3 puntos.
+while (puntosJugador1 < 3 && puntosJugador2 < 3) {
 
-//tiene un par?.
+//Descarta y roba 1 carta.
 if (manoJugador1[0].numero === manoJugador1[1].numero) {
     puntosJugador1++;
+} else {
+  //Descarta 1 carta
+let cartaDescartada = manoJugador1[0];
+manoJugador1.splice(0, 1);
+descartes.push(cartaDescartada);
+
+// Roba 1 carta
+let cartaRobada = mazoMezclado[0];
+mazoMezclado.splice(0, 1);
+manoJugador1.push(cartaRobada);
+ if (manoJugador1[0].numero === manoJugador1[1].numero) {
+    puntosJugador1++;
+    }
 }
 
-if (manoJugador2[0].numero === manoJugador2[1].numero) {
+//Descarta y roba 1 carta jugador2.
+ if (manoJugador2[0].numero === manoJugador2[1].numero) {
     puntosJugador2++;
-  }
+} else {
+
+let cartaDescartada = manoJugador2[0];
+manoJugador2.splice(0, 1);
+descartes.push(cartaDescartada);
+
+let cartaRobada = mazoMezclado[0];
+mazoMezclado.splice(0, 1);
+manoJugador2.push(cartaRobada);
+
+ if (manoJugador2[0].numero === manoJugador2[1].numero) {
+    puntosJugador2++;
+    }
+}
+
 console.log("Puntos Jugador 1:", puntosJugador1);
 console.log("Puntos Jugador 2:", puntosJugador2);
+}

@@ -24,16 +24,16 @@ Cartas:
 Reglas: 
 -Dos jugadores compiten para ser el primero en lograr 3 puntos formando pares. 
 -Se juega con una baraja española de 40 cartas. Al inicio de cada ronda se mezclan las cartas y cada jugador recibe 2 cartas.   
--Si alguino hace un par, gana 1 punto y la ronda termina. 
+-Si alguno hace un par, gana 1 punto y la ronda termina. 
 -Si no se forma par, cada jugador descarta una carta y roba otra.
 -Si se agota el mazo, se mezclan las cartas descartadas para seguir.  
 -Si ambos alcanzan 3 puntos en la misma ronda,se juega un desempate.
+
 Descripción de las principales funcionalidades:
--El archivo cartas.js genera el mazo de 40 cartas mediante dos bucles for anidados: uno recorre los 4 palos (oros, copas, espadas, bastos) y el otro los números del 1 al 10, creando un objeto {palo, numero} por cada carta.
--El mazo se mezcla con una funcion que, en cada cada repetición del bucle, genera una posición aleatoria con Math.random(), extrae esa carta del mazo original con splice() y la agrega al nuevo array mazoMezclado, hasta vaciar el mazo original.
--Se reparten 4 cartas del mazo mezclado: las 2 primeras se asignan a manoJugador1 y las 2 siguientes a manoJugador2, quitándolas del mazo con splice() a medida que se reparten.
+-El archivo cartas.js genera el mazo de 40 cartas mediante dos bucles for anidados: uno recorre los 4 palos (oros, copas, espadas, bastos) y el otro las posiciones de un array numeros = [1,2,3,4,5,6,7,10,11,12] (para respetar la numeración real de la baraja española, sin 8 ni 9), creando un objeto {palo, numero} por cada carta.
+-El mazo se mezcla con  un bucle que, en cada repetición, genera una posición aleatoria con Math.random(), extrae esa carta del mazo original con splice() y la agrega al nuevo array mazoMezclado, hasta vaciar el mazo original.
 -Se declaran las variables del juego: puntosJugador1, puntosJugador2, manoJugador1, manoJugador2 y el array descartes, donde se guardarán las cartas que se van descartando.
--Se comprueba si algún jugador tiene un par comparando el número de sus 2 cartas (manoJugador1[0].numero === manoJugador1[1].numero); si coinciden, se suma 1 punto a puntosJugador1 o puntosJugador2 según corresponda.
-Se ajustó la numeración de las cartas para que coincida con la baraja española real (1 al 7, y 10, 11, 12, sin 8 ni 9), usando un array numeros = [1,2,3,4,5,6,7,10,11,12] y accediendo a sus posiciones con numeros[j].
--Se resolvio cómo descartar y robar cartas cuando no hay par: se saca la primera carta de la mano del jugador con splice(), se agrega al array descartes, y se debería robar una nueva carta del mazoMezclado para reponerla. 
--Se conecta el juego con el HTML: se selecciona el contenedor <div id="mesaDeJuego"> con document.querySelector(), y se arma, para cada carta, la ruta de su imagen (rutaImagen) y la etiqueta <img> correspondiente (etiquetaImagen), para mostrarlas dentro de ese div con mesaDeJuego.innerHTML += etiquetaImagen.
+-Se reparten 4 cartas del mazo mezclado: las 2 primeras se asignan a manoJugador1 y las 2 siguientes a manoJugador2, quitándolas del mazo con splice() a medida que se reparten.
+-cartas.js se conecta con el HTML: se selecciona el contenedor <div id="mesaDeJuego"> con document.querySelector(), y se arma, para cada carta repartida, la ruta de su imagen (rutaImagen) y la etiqueta <img> correspondiente (etiquetaImagen), mostrándolas dentro de ese div con mesaDeJuego.innerHTML += etiquetaImagen.
+-Un bucle while repite la lógica de cada ronda mientras ningún jugador llegue a 3 puntos: para cada jugador, se comprueba si sus 2 cartas forman un par (comparando manoJugador[0].numero === manoJugador[1].numero). Si hay par, se suma 1 punto. Si no, el jugador descarta su primera carta (se saca de la mano con splice() y se agrega al array descartes) y roba una nueva del mazoMezclado (se saca con splice() y se agrega a la mano con push()), volviendo a comprobar si ahora sí forma un par con la carta nueva.
+
