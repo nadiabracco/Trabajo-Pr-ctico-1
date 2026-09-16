@@ -72,6 +72,16 @@ for (let i = 0; i < 2; i++) {
 // Repite cada ronda: comparar, descartar y robar hasta que alguien gane 3 puntos.
 while (puntosJugador1 < 3 && puntosJugador2 < 3) {
 
+    // Si el mazo se agotó, recicla las cartas descartadas
+    if (mazoMezclado.length === 0) {
+        const cantidadDeCartas = descartes.length;
+        for (let i = 0; i < cantidadDeCartas; i++) {
+            let posicionAzar = Math.floor(Math.random() * descartes.length);
+            let cartaReciclada = descartes[posicionAzar];
+            descartes.splice(posicionAzar, 1);
+            mazoMezclado.push(cartaReciclada);
+        }
+    }           
 //Descarta y roba 1 carta.
 if (manoJugador1[0].numero === manoJugador1[1].numero) {
     puntosJugador1++;
@@ -110,4 +120,11 @@ manoJugador2.push(cartaRobada);
 
 console.log("Puntos Jugador 1:", puntosJugador1);
 console.log("Puntos Jugador 2:", puntosJugador2);
+}
+
+//mostrar quién ganó
+if (puntosJugador1 === 3) {
+    console.log("Ganó el Jugador 1");
+} else {
+    console.log("Ganó el Jugador 2");
 }
