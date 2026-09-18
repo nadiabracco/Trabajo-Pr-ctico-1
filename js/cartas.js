@@ -1,6 +1,9 @@
 // Selecciona el elemento del HTML donde se van a mostrar las cartas.
 let mesaDeJuego = document.querySelector("#mesaDeJuego");
+// Trae el nombre que el jugador que se ingresó al principio.
+let nombre = localStorage.getItem('nombre');
 
+function jugarPartida() {
 //Genera el mazo cartas.
 const mazo = [];
 
@@ -54,6 +57,9 @@ console.log("Mano Jugador 1:", manoJugador1);
 console.log("Mano Jugador 2:", manoJugador2);
 console.log("Cartas restantes en el mazo:", mazoMezclado.length);
 
+// Vacía las cartas mostradas antes de la partida actual.
+mesaDeJuego.innerHTML = "";
+
 // Muestra las cartas del Jugador 1.
 for (let i = 0; i < 2; i++) {
     let carta = manoJugador1[i];
@@ -61,7 +67,6 @@ for (let i = 0; i < 2; i++) {
     let etiquetaImagen = '<img src="' + rutaImagen + '">';
     mesaDeJuego.innerHTML += etiquetaImagen;
 }
-
 // Muestra las cartas del Jugador 2.
 for (let i = 0; i < 2; i++) {
     let carta = manoJugador2[i];
@@ -122,9 +127,16 @@ console.log("Puntos Jugador 1:", puntosJugador1);
 console.log("Puntos Jugador 2:", puntosJugador2);
 }
 
-//mostrar quién ganó
+//Muestra quién ganó.
 if (puntosJugador1 === 3) {
-    console.log("Ganó el Jugador 1");
+     console.log("Ganó " + nombre);
 } else {
-    console.log("Ganó el Jugador 2");
+    console.log("Ganó la Reina Roja");
 }
+}
+jugarPartida();
+//Boton de nueva ronda.
+let nuevaRonda = document.querySelector("#botonNuevaRonda");
+nuevaRonda.addEventListener("click", function() {
+jugarPartida();
+});
