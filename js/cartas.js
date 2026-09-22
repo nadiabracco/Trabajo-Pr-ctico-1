@@ -2,6 +2,8 @@
 let mesaDeJuego = document.querySelector("#mesaDeJuego");
 // Trae el nombre que el jugador que se ingresó al principio.
 let nombre = localStorage.getItem('nombre');
+//muestra el puntaje. 
+let puntajeCartas = document.querySelector("#puntajeCartas");
 //variable global
 let mazoMezclado = [];
 let puntosJugador1 = 0;
@@ -66,6 +68,7 @@ console.log("Mano Jugador 2:", manoJugador2);
 console.log("Cartas restantes en el mazo:", mazoMezclado.length);
 
 mostrarCartas();
+mostrarPuntaje();
 jugarRonda(); 
 }
 // Comprueba si el juego terminó, sigue con la ronda.
@@ -122,8 +125,9 @@ function elJugadorDescarta(cartaATirar) {
     if (manoJugador1[0].numero === manoJugador1[1].numero) {
         puntosJugador1++;
     }
-   
-     turnoReinaRoja();
+    mostrarCartas();
+    mostrarPuntaje();
+    turnoReinaRoja();
 }
 
 function turnoReinaRoja() {
@@ -147,8 +151,10 @@ function turnoReinaRoja() {
     console.log("Puntos Jugador 1:", puntosJugador1);
     console.log("Puntos Jugador 2:", puntosJugador2);
 
-    mostrarCartas(); 
-    jugarRonda();
+   mostrarPuntaje();
+   mostrarCartas();
+   jugarRonda();
+
 }
 jugarPartida();
 //Boton de nueva ronda.
@@ -175,4 +181,8 @@ function mostrarCartas() {
         let etiquetaImagen = '<img src="' + rutaImagen + '">';
         mesaDeJuego.innerHTML += etiquetaImagen;
     }
+}
+function mostrarPuntaje() {
+    let textoPuntaje = nombre + ": " + puntosJugador1 + " - Reina Roja: " + puntosJugador2;
+    puntajeCartas.innerHTML = textoPuntaje;
 }

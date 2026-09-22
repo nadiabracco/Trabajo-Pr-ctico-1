@@ -41,3 +41,5 @@ Descripción de las principales funcionalidades:
 -elJugadorDescarta(cartaATirar) se ejecuta al hacer clic en un botón: descarta la carta elegida, roba una nueva del mazoMezclado, comprueba si ahora hay par, y llama a turnoReinaRoja().
 -turnoReinaRoja() juega el turno automático de la computadora (descarta y roba si no tiene par) y llama de nuevo a jugarRonda() para continuar con la siguiente ronda, hasta que algún jugador llegue a 3 puntos.
 -Al detectar que el juego terminó, se muestra por consola quién ganó, usando el nombre real del jugador (traído con localStorage.getItem('nombre')) o "la Reina Roja" si ganó la computadora.
+-Se agrega el contenedor <div id="puntajeCartas">, ubicado antes de mesaDeJuego en el HTML, para mostrar el puntaje en pantalla.
+-mostrarPuntaje() arma un texto con el nombre real del jugador (localStorage) y ambos puntajes (puntosJugador1 y puntosJugador2), y lo asigna a puntajeCartas.innerHTML; se llama junto a mostrarCartas() en jugarPartida(), elJugadorDescarta() y turnoReinaRoja(), siempre antes de jugarRonda(), para que el marcador se actualice en tiempo real con cada ronda.
