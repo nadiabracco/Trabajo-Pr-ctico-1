@@ -13,7 +13,7 @@ body {
 #contenedor {
     width: 90%;
     max-width: 75rem;
-    background-color: #c85e8af4;
+    background-color: #d89f99;
     text-align: center;
 }
 
@@ -21,60 +21,62 @@ body {
 header {
   background-color: rgba(255,255,255);
   text-align: center;
-  padding: 2em;
+  padding: 1rem 0 1rem 0;
   margin: 1rem; /*separa el header del contenedor para que no este pegado*/
+  border-radius: 0.8em;
 }
 
-
-header h1 {
-  font-family: "Alice", serif;    
+header h1 {   
   color: #b91806;
-  margin-bottom: 2em;
-  font-size: 1.8rem;
+  margin: 2rem;
+  padding: 1rem;
+  font-size: 2rem;
+  
 }
+
 nav ul {
-  list-style: none;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
- gap: 0.6em;
-  padding: 0.8em 1em;
-  /*background-color: rgba(244, 123, 123, 0.959);*/
-    background-color:  #901105;
+  list-style: none;
+  padding: 0.1rem 1rem;
+  background-color:  #901105;
 }
+
+nav li {
+    margin: 1rem; /*separa li*/
+} 
+
 nav a {
-  text-decoration: none;
+  text-decoration: none; /*saca cualquier decoración de línea que tenga el texto*/
   color: rgb(151, 22, 22); 
   font-weight: bold;
-  font-size: 0.9em;   
+  font-size: 0.9rem;   
   display: inline-block;
-   padding: 0.5em 1.4em;
+  padding: 0.8rem 1rem;
   background-color: #d89f99;
-  /*background-color: #e65454;*/
-  border-radius: 50px;
-   border: 1px solid #a07e0c;
-   white-space: nowrap;
+  border-radius: 2rem; /*redondea los bordes del boton*/
+  border: 0.1rem solid #a07e0c;
+  white-space: nowrap; /*evita que el texto se divida en varias lineas*/
 }
-nav a:hover {
+
+nav a:hover { /*link cuando paso el mouse por encima*/
   color: #000
 }
-/* Contenido */
+
+
 main {
-  max-width: 90%;
-  margin: 3.1em auto;
-  padding: 2em;
+  max-width: 98%;
+  margin: 1rem ;
+  padding: 5rem;
   background-color: rgba(255, 255, 255);
-  border-radius: 0.9em;
-  text-align: center;
-  flex: 1; 
+  border-radius: 0.8em;
 }
 
 h2 {
-  font-size: 1.5em;    
-  font-family: "Alice", serif;
-  margin-bottom: 1em;
+  font-size: 1.6rem;    
   color: #2c3e50;
 }
+----
 .contenedor-juego {
   width: 30%;
   min-width: 200px;
