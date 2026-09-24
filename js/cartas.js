@@ -11,7 +11,8 @@ let puntosJugador2 = 0;
 let manoJugador1 = [];
 let manoJugador2 = [];
 let descartes = [];
-
+let esperandoDescarte = false;
+let enDesempate = false;
 //jugar partida
 function jugarPartida() {
 //Genera el mazo cartas.
@@ -51,7 +52,7 @@ console.log("Mazo mezclado:", mazoMezclado);
  manoJugador1 = [];
  manoJugador2 = [];
  descartes = [];
-
+ enDesempate = false; 
 //Reparte las cartas a los jugadores.
 for (let i = 0; i < 4; i++) {
     let cartaRepartida = mazoMezclado[0];
@@ -59,7 +60,8 @@ for (let i = 0; i < 4; i++) {
 
     if (i < 2) {
         manoJugador1.push(cartaRepartida);
-    } else {
+    }
+    else {
         manoJugador2.push(cartaRepartida);
     }
 }
@@ -71,17 +73,23 @@ mostrarCartas();
 mostrarPuntaje();
 jugarRonda(); 
 }
-// Comprueba si el juego terminó, sigue con la ronda.
+//compruba quien gano y el desempate.
 function jugarRonda() {
     if (puntosJugador1 === 3 || puntosJugador2 === 3) {
-        if (puntosJugador1 === 3) {
+        if (puntosJugador1 === 3 && puntosJugador2 === 3) {
+             enDesempate = true;
+        }  //desempate.
+        else if (puntosJugador1 === 3) {
             console.log("Ganó " + nombre);
-        } else {
+            esperandoDescarte = false;
+            return;
+        } 
+        else if (puntosJugador2 === 3) {
             console.log("Ganó la Reina Roja");
+            esperandoDescarte = false;
+            return;
         }
-        return;
     }
-
     // Si el mazo se agotó, recicla las cartas descartadas
     if (mazoMezclado.length === 0) {
         const cantidadDeCartas = descartes.length;
@@ -95,9 +103,27 @@ function jugarRonda() {
 //Descarta y roba 1 carta.
 if (manoJugador1[0].numero === manoJugador1[1].numero) {
     puntosJugador1++;
-} else {
+    manoJugador1 = [];
+    let cartaRobada = mazoMezclado[0];
+    mazoMezclado.splice(0, 1);
+    manoJugador1.push(cartaRobada);
+    cartaRobada = mazoMezclado[0];
+    mazoMezclado.splice(0, 1);
+    manoJugador1.push(cartaRobada);
+    if (enDesempate) {
+    if (puntosJugador1 > puntosJugador2) {
+    console.log("Ganó " + nombre);
+    esperandoDescarte = false;
+    return;
+    }
+}
+    esperandoDescarte = false;
+ } 
+ else {
     //boton descarte
-   let boton0 = document.querySelector("#botonDescarte0");
+    esperandoDescarte = true;
+    mostrarCartas();  
+    let boton0 = document.querySelector("#botonDescarte0");
     let boton1 = document.querySelector("#botonDescarte1");
     boton0.addEventListener("click", function() {
         elJugadorDescarta(0);
@@ -121,10 +147,20 @@ function elJugadorDescarta(cartaATirar) {
     let cartaRobada = mazoMezclado[0];
     mazoMezclado.splice(0, 1);
     manoJugador1.push(cartaRobada);
-    //Comprueba si la carta nueva forma par
+    //Comprueba si la carta nueva forma par.
     if (manoJugador1[0].numero === manoJugador1[1].numero) {
         puntosJugador1++;
+        if (enDesempate) {
+    if (puntosJugador1 > puntosJugador2) {
+    console.log("Ganó " + nombre);
+     esperandoDescarte = false;
+     mostrarCartas();
+     mostrarPuntaje();
+     return;
     }
+   } 
+ }
+     esperandoDescarte = false;
     mostrarCartas();
     mostrarPuntaje();
     turnoReinaRoja();
@@ -134,7 +170,25 @@ function turnoReinaRoja() {
     //Descarta y roba 1 carta jugador2.
     if (manoJugador2[0].numero === manoJugador2[1].numero) {
         puntosJugador2++;
-    } else {
+        manoJugador2 = [];
+        let cartaRobada = mazoMezclado[0];
+     mazoMezclado.splice(0, 1);
+     manoJugador2.push(cartaRobada);
+     cartaRobada = mazoMezclado[0];
+     mazoMezclado.splice(0, 1);
+     manoJugador2.push(cartaRobada);
+    
+         if (enDesempate) {
+         if (puntosJugador1 < puntosJugador2) {
+        console.log("Ganó la Reina Roja");
+        esperandoDescarte = false;
+        mostrarCartas();
+        mostrarPuntaje();
+        return;
+        } 
+      } 
+     } 
+    else {
         let cartaDescartada = manoJugador2[0];
         manoJugador2.splice(0, 1);
         descartes.push(cartaDescartada);
@@ -171,9 +225,15 @@ function mostrarCartas() {
         let rutaImagen = "imagenes/" + carta.palo + " " + carta.numero + ".png";
         let etiquetaImagen = '<img src="' + rutaImagen + '">';
         mesaDeJuego.innerHTML += etiquetaImagen;
-        let etiquetaBoton = '<button id="botonDescarte' + i + '">Descartar</button>';
-        mesaDeJuego.innerHTML += etiquetaBoton;
+        let etiquetaBoton;
+    if (esperandoDescarte) {
+        etiquetaBoton = '<button id="botonDescarte' + i + '">Descartar</button>';
+    } else {
+        etiquetaBoton = '<button id="botonDescarte' + i + '" disabled>Descartar</button>';
     }
+    mesaDeJuego.innerHTML += etiquetaBoton;
+   }
+    
 
     for (let i = 0; i < 2; i++) {
         let carta = manoJugador2[i];
@@ -181,7 +241,7 @@ function mostrarCartas() {
         let etiquetaImagen = '<img src="' + rutaImagen + '">';
         mesaDeJuego.innerHTML += etiquetaImagen;
     }
-}
+ }
 function mostrarPuntaje() {
     let textoPuntaje = nombre + ": " + puntosJugador1 + " - Reina Roja: " + puntosJugador2;
     puntajeCartas.innerHTML = textoPuntaje;
