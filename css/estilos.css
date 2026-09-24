@@ -114,3 +114,11 @@ footer {
   color: rgb(151, 22, 22); 
   background-color: rgba(243, 194, 194, 0.959);
 }
+
+/* Juego dados */
+
+.dado-imagen {
+  width: 100px;
+  height: auto;
+}
+
