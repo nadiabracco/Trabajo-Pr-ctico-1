@@ -14,6 +14,14 @@ async function obtenerPreguntas() {
         console.log(datos.results[i].correct_answer);
         console.log(datos.results[i].incorrect_answers);
 
+        // Junta la respuesta correcta y las tres incorrectas
+        let opciones = [
+            datos.results[i].correct_answer,
+            datos.results[i].incorrect_answers[0],
+            datos.results[i].incorrect_answers[1],
+            datos.results[i].incorrect_answers[2]
+        ];
+
 
     }
 }
