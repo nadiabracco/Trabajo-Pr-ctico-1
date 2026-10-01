@@ -123,4 +123,81 @@ footer {
 }
 
 /*juego de cartas*/
+#mesaDeJuego {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
+.jugador,
+.computadora {
+    width: 100%;
+    max-width: 30rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #901105;
+    border: 0.2rem solid #a07e0c;
+    border-radius: 0.8rem;
+}
+
+.jugador h3,
+.computadora h3 {
+    margin: 0 0 1rem 0;
+    color: #901105;
+    font-size: 1.3rem;
+}
+
+.mano {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.carta {
+    width: 35%;
+    min-width: 4rem;
+    max-width: 9rem;
+    margin: 0 0.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.carta img {
+    width: 100%;
+    height: auto;
+}
+
+.carta button {
+    margin-top: 0.5rem;
+}
+
+#botonNuevaRonda {
+    display: block;
+    margin: 1.25rem auto 0;
+}
+
+#puntajeCartas {
+    width: 90%;
+    max-width: 25rem;
+    margin: 1.5rem auto;
+    padding: 0.6rem 1rem;
+    background-color: #f8f4e3;
+    color: #901105;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    border: 0.15rem solid #a07e0c;
+    border-radius: 0.8rem;
+}
+
+#mensajeFinal {
+    margin: 1rem 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #901105;
+    text-align: center;
+}

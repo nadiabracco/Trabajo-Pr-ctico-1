@@ -249,7 +249,8 @@ function turnoReinaRoja() {
     mostrarCartas();
     jugarRonda();
 }
-jugarPartida();
+
+ jugarPartida();
 //Boton de nueva ronda.
 let nuevaRonda = document.querySelector("#botonNuevaRonda");
 nuevaRonda.addEventListener("click", function() {
@@ -257,33 +258,54 @@ jugarPartida();
 });
 
 function mostrarCartas() {
-    mesaDeJuego.innerHTML = "";
-
-    mesaDeJuego.innerHTML += '<section class="jugador"><h3>Jugador</h3>';
+      let html = "";
+    html += '<section class="jugador"><h3>' + nombre + '</h3>';
+    html += '<div class="mano">';
     for (let i = 0; i < 2; i++) {
         let carta = manoJugador1[i];
         let rutaImagen = "imagenes/" + carta.palo + " " + carta.numero + ".png";
         let etiquetaImagen = '<img src="' + rutaImagen + '">';
-        mesaDeJuego.innerHTML += etiquetaImagen;
+       html += '<div class="carta">';
+       html += etiquetaImagen;
         let etiquetaBoton;
     if (esperandoDescarte) {
         etiquetaBoton = '<button id="botonDescarte' + i + '">Descartar</button>';
     } else {
         etiquetaBoton = '<button id="botonDescarte' + i + '" disabled>Descartar</button>';
     }
-    mesaDeJuego.innerHTML += etiquetaBoton;
+        html += etiquetaBoton;
+        html += '</div>';
      }
-    mesaDeJuego.innerHTML += '</section>';
+    html += '</div>';
+    html += '</section>';
     
-     mesaDeJuego.innerHTML += '<section class="computadora"><h3>Computadora</h3>';
+      html += '<section class="computadora"><h3>Reina Roja</h3>';
+      html += '<div class="mano">';
         for (let i = 0; i < 2; i++) {
         let carta = manoJugador2[i];
         let rutaImagen = "imagenes/" + carta.palo + " " + carta.numero + ".png";
         let etiquetaImagen = '<img src="' + rutaImagen + '">';
-        mesaDeJuego.innerHTML += etiquetaImagen;
+        html += '<div class="carta">';
+        html += etiquetaImagen;
+        html += '</div>';
     }
-     mesaDeJuego.innerHTML += '</section>';
- }
+     html += '</div>';
+    
+    // El botón de nueva ronda.
+    html += '<button id="botonNuevaRonda">Nueva Ronda</button>';
+    html += '</section>';  
+
+    // Pasa todo lo armado a la página.
+    mesaDeJuego.innerHTML = html;
+
+    // El botón se crea de nuevo cada vez que se dibuja la mesa,
+    // así que hay que conectarle el clic acá.
+    let nuevaRonda = document.querySelector("#botonNuevaRonda");
+    nuevaRonda.addEventListener("click", function() {
+        jugarPartida();
+    });
+}
+
 function mostrarPuntaje() {
     let textoPuntaje = nombre + ": " + puntosJugador1 + " - Reina Roja: " + puntosJugador2;
     puntajeCartas.innerHTML = textoPuntaje;
