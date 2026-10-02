@@ -1,29 +1,34 @@
-// Función que obtiene las preguntas de la API.
-async function obtenerPreguntas() {
- // URL de la API con los parámetros.
-    let url = "https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple";
-   
-    // Hace la solicitud a la API y espera la respuesta.
-    let respuesta = await fetch(url);
- // Convierte la respuesta de la API a formato JSON.
-    let datos = await respuesta.json();
-    //recorre las preguntas.
-    for (let i = 0; i < datos.results.length; i++) {
-         // Muestra en consola la pregunta
-        console.log(datos.results[i].question);
-        console.log(datos.results[i].correct_answer);
-        console.log(datos.results[i].incorrect_answers);
+// Diccionario de traduccion (fijo, no cambia nunca)
+const traduccionCategorias = {
+  "Art": "Arte",
+  "Entertainment: Film": "Cine",
+  "Entertainment: Music": "Música"
+};
 
-        // Junta la respuesta correcta y las tres incorrectas
-        let opciones = [
-            datos.results[i].correct_answer,
-            datos.results[i].incorrect_answers[0],
-            datos.results[i].incorrect_answers[1],
-            datos.results[i].incorrect_answers[2]
-        ];
+// IDs de las categorías que eusamos
+const idsElegidos = [25, 11, 12];
 
+// Funcion para traer las categorías desde la API
+async function traerCategorias() {
+  try {
+    const respuesta = await fetch("https://opentdb.com/api_category.php");
 
+    if (!respuesta.ok) {
+      throw new Error(`HTTP ${respuesta.status}`);
     }
+
+    const datos = await respuesta.json();
+    const todasLasCategorias = datos.trivia_categories;
+
+    // Filtro para quedarnos solo con 3 
+    const categoriasElegidas = todasLasCategorias.filter((categoria) =>
+      idsElegidos.includes(categoria.id)
+    );
+
+    console.log(categoriasElegidas); 
+  } catch (error) {
+    console.log("Hubo un error al traer las categorías:", error);
+  }
 }
- //Llama a la función.
-obtenerPreguntas();
+
+traerCategorias();
