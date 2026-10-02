@@ -201,3 +201,18 @@ footer {
     color: #901105;
     text-align: center;
 }
+/*tabla*/
+.juego {
+    width: 45%;
+    min-width: 15rem;
+    padding: 1rem;
+    background-color: #f8f4e3;
+    color: #901105;
+    border: 0.15rem solid #a07e0c;
+    border-radius: 0.8rem;
+}
+
+.juego ul {
+    list-style: none;
+    padding: 0;
+}

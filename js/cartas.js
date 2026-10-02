@@ -98,6 +98,61 @@ function robarCarta() {
     return mazoMezclado.shift(); 
 }
 
+// Registra quién ganó: cuenta las victorias y lleva la racha de victorias seguidas.
+function registrarVictoria(ganador) {
+    if (ganador === "reina") {
+        // Ganó la Reina Roja: se suma su victoria y la racha del jugador se corta.
+        let totalReina = Number(localStorage.getItem("victoriasReina"));
+        localStorage.setItem("victoriasReina", totalReina + 1);
+        localStorage.setItem("rachaActualCartas", 0);
+    }
+    else {
+        // Ganó el jugador: se suma su victoria.
+        let totalJugador = Number(localStorage.getItem("victoriasJugador"));
+        localStorage.setItem("victoriasJugador", totalJugador + 1);
+
+        // La racha sigue solo si es la misma persona que la venía haciendo.
+        let racha = Number(localStorage.getItem("rachaActualCartas"));
+        let nombreDeLaRacha = localStorage.getItem("rachaNombreCartas");
+        if (nombreDeLaRacha === nombre) {
+            racha = racha + 1;
+        } else {
+            racha = 1;
+        }
+        localStorage.setItem("rachaActualCartas", racha);
+        localStorage.setItem("rachaNombreCartas", nombre);
+
+        // Récord general (la mejor racha de todos, con su nombre).
+        let recordRacha = Number(localStorage.getItem("recordRachaCartas"));
+        if (racha > recordRacha) {
+            localStorage.setItem("recordRachaCartas", racha);
+            localStorage.setItem("recordRachaCartasNombre", nombre);
+        }
+
+        // Ranking: lista con la mejor racha de cada jugador.
+        let ranking = [];
+        let guardado = localStorage.getItem("rankingCartas");
+        if (guardado !== null) {
+            ranking = JSON.parse(guardado);
+        }
+
+        let encontrado = false;
+        for (let i = 0; i < ranking.length; i++) {
+            if (ranking[i].nombre === nombre) {
+                encontrado = true;
+                if (racha > ranking[i].racha) {
+                    ranking[i].racha = racha;
+                }
+            }
+        }
+        if (encontrado === false) {
+            ranking.push({ nombre: nombre, racha: racha });
+        }
+
+        localStorage.setItem("rankingCartas", JSON.stringify(ranking));
+    }
+}
+
 //compruba quien gano y el desempate.
 function jugarRonda() {
     if (puntosJugador1 >= 3 || puntosJugador2 >= 3) {
@@ -106,17 +161,14 @@ function jugarRonda() {
         }
         else if (puntosJugador1 >= 3) {
             console.log("Ganó " + nombre);
+            registrarVictoria("jugador");
             mensajeFinal.innerHTML = "Ganó " + nombre;
             esperandoDescarte = false;
-            let recordGuardado = Number(localStorage.getItem("recordCartas"));
-            if (puntosJugador1 > recordGuardado) {
-                localStorage.setItem("recordCartas", puntosJugador1);
-                localStorage.setItem("recordCartasNombre", nombre);
-            }
             return;
         }
         else if (puntosJugador2 >= 3) {
             console.log("Ganó la Reina Roja");
+            registrarVictoria("reina");
             mensajeFinal.innerHTML = "Ganó la Reina Roja";
             esperandoDescarte = false;
             return;
@@ -135,6 +187,7 @@ function jugarRonda() {
         if (enDesempate) {
             if (puntosJugador1 > puntosJugador2) {
                 console.log("Ganó " + nombre);
+                registrarVictoria("jugador");
                 mensajeFinal.innerHTML = "Ganó " + nombre;
                 esperandoDescarte = false;
                 mostrarCartas();
@@ -181,6 +234,7 @@ function elJugadorDescarta(cartaATirar) {
         if (enDesempate) {
             if (puntosJugador1 > puntosJugador2) {
                 console.log("Ganó " + nombre);
+                registrarVictoria("jugador");
                 mensajeFinal.innerHTML = "Ganó " + nombre;
                 esperandoDescarte = false;
                 mostrarCartas();
@@ -207,6 +261,7 @@ function turnoReinaRoja() {
         if (enDesempate) {
             if (puntosJugador1 < puntosJugador2) {
                 console.log("Ganó la Reina Roja");
+                registrarVictoria("reina");
                 mensajeFinal.innerHTML = "Ganó la Reina Roja";
                 esperandoDescarte = false;
                 mostrarCartas();
@@ -232,6 +287,7 @@ function turnoReinaRoja() {
             if (enDesempate) {
                 if (puntosJugador1 < puntosJugador2) {
                     console.log("Ganó la Reina Roja");
+                    registrarVictoria("reina");
                     mensajeFinal.innerHTML = "Ganó la Reina Roja";
                     esperandoDescarte = false;
                     mostrarCartas();
@@ -252,10 +308,10 @@ function turnoReinaRoja() {
 
  jugarPartida();
 //Boton de nueva ronda.
-let nuevaRonda = document.querySelector("#botonNuevaRonda");
-nuevaRonda.addEventListener("click", function() {
-jugarPartida();
-});
+//let nuevaRonda = document.querySelector("#botonNuevaRonda");
+//nuevaRonda.addEventListener("click", function() {
+//jugarPartida();
+//});
 
 function mostrarCartas() {
       let html = "";

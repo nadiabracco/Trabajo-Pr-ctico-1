@@ -9,6 +9,9 @@ const dadoComputadoraImg = document.querySelector("#dado-computadora");
 let puntajeUsuario = 0;
 let puntajeComputadora = 0;
 let enDesempate = false; // indica si el próximo tiro es de desempate
+let rachaActual = 0;   // pares seguidos que lleva
+let mejorRacha = 0;    // la racha más larga de esta partida
+   
 
 // Funcion para tirar un dado
 function tirarDado() {
@@ -39,8 +42,18 @@ function tirarDado() {
     // Logica normal: par suma, impar resta
     if (dadoUsuario % 2 === 0) {
         puntajeUsuario += dadoUsuario;
+        rachaActual++;  
+        if (rachaActual > mejorRacha) {
+        mejorRacha = rachaActual;
+     }
+    let recordGuardado = Number(localStorage.getItem("recordRachaDados"));
+    if (mejorRacha > recordGuardado) {
+        localStorage.setItem("recordRachaDados", mejorRacha);
+        localStorage.setItem("recordRachaDadosNombre", localStorage.getItem("nombre"));
+     }
     } else {
         puntajeUsuario -= 1;
+        rachaActual = 0;
         if (puntajeUsuario < 0) puntajeUsuario = 0;
     }
 
@@ -72,6 +85,8 @@ function reiniciarJuego() {
     puntajeUsuario = 0;
     puntajeComputadora = 0;
     enDesempate = false; // resetea el modo desempate
+    rachaActual = 0;    
+    mejorRacha = 0;  
     puntajesP.innerText = `Usuario: 0 | Computadora: 0`;
     dadoUsuarioImg.src = "imagenes/dado1.jpg";
     dadoUsuarioImg.alt = "Dado del usuario";
