@@ -28,3 +28,13 @@ if (rachaDados) {
 } else {
     recordDadosP.innerText = "Todavía no hay récord.";
 }
+
+const parrafoRecordTrivia = document.querySelector("#recordTrivia");
+const recordTrivia = localStorage.getItem("recordTrivia");
+const recordTriviaNombre = localStorage.getItem("recordTriviaNombre");
+
+if (recordTrivia) {
+ parrafoRecordTrivia.textContent = recordTriviaNombre + ": " + recordTrivia;
+} else {
+  parrafoRecordTrivia.textContent = "Todavía no hay récord de trivia.";
+}

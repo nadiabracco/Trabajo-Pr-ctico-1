@@ -15,6 +15,9 @@ const traduccionCategorias = {
 // IDs de las categorías que usamos
 const idsElegidos = [25, 11, 12];
 
+// Segundos que tiene el jugador para responder cada pregunta
+const TIEMPO_POR_PREGUNTA = 10; 
+
 // Elemento donde van a aparecer los botones de categoría
 const contenedorCategorias = document.querySelector("#categorias");
 
@@ -27,6 +30,9 @@ const numeroPreguntaSpan = document.querySelector("#numero-pregunta");
 // Elementos de puntaje
 const puntosSpan = document.querySelector("#puntos");
 const erroresSpan = document.querySelector("#errores");
+
+// Elemento donde se muestra el tiempo que queda
+const tiempoSpan = document.querySelector("#tiempo");
 
 // Elemento del botón reiniciar
 const botonReiniciarTrivia = document.querySelector("#reiniciar-trivia");
@@ -41,6 +47,9 @@ let indice = 0;
 let puntos = 0;
 let errores = 0;
 
+// Segundos que le quedan a la pregunta actual
+let tiempoRestante = TIEMPO_POR_PREGUNTA;
+let temporizador = null;
 
 // ==========================================
 // LÓGICA PRINCIPAL
@@ -77,6 +86,28 @@ async function traerCategorias() {
   }
 }
 
+// Arranca la cuenta regresiva de la pregunta actual
+function iniciarTemporizador() { 
+  detenerTemporizador(); 
+  tiempoRestante = TIEMPO_POR_PREGUNTA;
+  tiempoSpan.textContent = tiempoRestante;
+
+  temporizador = setInterval(function () {
+    tiempoRestante -= 1;
+    tiempoSpan.textContent = tiempoRestante;
+
+    // Si se acabó el tiempo, cuenta como respuesta incorrecta
+    if (tiempoRestante <= 0) {
+      responder(null);
+    }
+  }, 1000);
+}
+
+// Frena la cuenta regresiva
+function detenerTemporizador() { 
+  clearInterval(temporizador);
+}
+
 // Se ejecuta cuando el jugador clickea una categoría
 function elegirCategoria(idCategoria) {
   preguntasActuales = preguntasPorCategoria[idCategoria];
@@ -94,10 +125,13 @@ function mostrarPregunta() {
   const preguntaActual = preguntasActuales[indice];
   elementoPregunta.textContent = preguntaActual.texto;
   numeroPreguntaSpan.textContent = indice + 1;
+    // Cada vez que aparece una pregunta, arranca el tiempo
+  iniciarTemporizador(); 
 }
 
 // Se ejecuta cuando el jugador clickea Verdadero o Falso
 function responder(eleccionUsuario) {
+    detenerTemporizador();
   const preguntaActual = preguntasActuales[indice];
 
   // Suma punto o error según si acertó o no
@@ -113,6 +147,15 @@ function responder(eleccionUsuario) {
 
   avanzar();
 }
+// Guarda el mejor puntaje de la trivia, solo si supera al anterior
+function guardarRecordTrivia() { 
+  const recordAnterior = Number(localStorage.getItem("recordTrivia")) || 0;
+
+  if (puntos > recordAnterior) {
+    localStorage.setItem("recordTrivia", puntos);
+    localStorage.setItem("recordTriviaNombre", localStorage.getItem("nombre"));
+  }
+}
 
 // Decide si la partida termina (por errores o por completar las 10 preguntas) o si pasa a la siguiente
 function avanzar() {
@@ -121,6 +164,7 @@ function avanzar() {
     elementoPregunta.textContent = "¡Partida terminada! Llegaste a 3 errores.";
     botonVerdadero.disabled = true;
     botonFalso.disabled = true;
+    guardarRecordTrivia();
     return;
   }
 
@@ -131,6 +175,7 @@ function avanzar() {
     elementoPregunta.textContent = "¡Ganaste la partida! Completaste las 10 preguntas.";
     botonVerdadero.disabled = true;
     botonFalso.disabled = true;
+    guardarRecordTrivia(); 
     return;
   }
 
@@ -139,6 +184,9 @@ function avanzar() {
 
 // Vuelve el juego al estado inicial
 function reiniciarTrivia() {
+   // Frena el tiempo y vuelve a mostrar los 10 segundos
+  detenerTemporizador(); 
+  tiempoSpan.textContent = TIEMPO_POR_PREGUNTA; 
   puntos = 0;
   errores = 0;
   indice = 0;

@@ -78,81 +78,6 @@ mostrarPuntaje();
 jugarRonda(); 
 }
 
-// Recicla las cartas descartadas cuando el mazo se agota.
-function reciclarMazo() {
-    if (mazoMezclado.length === 0) {
-        const cantidadDeCartas = descartes.length;
-        for (let i = 0; i < cantidadDeCartas; i++) {
-            let posicionAzar = Math.floor(Math.random() * descartes.length);
-            let cartaReciclada = descartes[posicionAzar];
-            descartes.splice(posicionAzar, 1);
-            mazoMezclado.push(cartaReciclada);
-        }
-    }
-}
-
-function robarCarta() {
-    // si el mazo está vacío, lo rellena con los descartes
-    reciclarMazo();
-    // saca la primera carta y la devuelve             
-    return mazoMezclado.shift(); 
-}
-
-// Registra quién ganó: cuenta las victorias y lleva la racha de victorias seguidas.
-function registrarVictoria(ganador) {
-    if (ganador === "reina") {
-        // Ganó la Reina Roja: se suma su victoria y la racha del jugador se corta.
-        let totalReina = Number(localStorage.getItem("victoriasReina"));
-        localStorage.setItem("victoriasReina", totalReina + 1);
-        localStorage.setItem("rachaActualCartas", 0);
-    }
-    else {
-        // Ganó el jugador: se suma su victoria.
-        let totalJugador = Number(localStorage.getItem("victoriasJugador"));
-        localStorage.setItem("victoriasJugador", totalJugador + 1);
-
-        // La racha sigue solo si es la misma persona que la venía haciendo.
-        let racha = Number(localStorage.getItem("rachaActualCartas"));
-        let nombreDeLaRacha = localStorage.getItem("rachaNombreCartas");
-        if (nombreDeLaRacha === nombre) {
-            racha = racha + 1;
-        } else {
-            racha = 1;
-        }
-        localStorage.setItem("rachaActualCartas", racha);
-        localStorage.setItem("rachaNombreCartas", nombre);
-
-        // Récord general (la mejor racha de todos, con su nombre).
-        let recordRacha = Number(localStorage.getItem("recordRachaCartas"));
-        if (racha > recordRacha) {
-            localStorage.setItem("recordRachaCartas", racha);
-            localStorage.setItem("recordRachaCartasNombre", nombre);
-        }
-
-        // Ranking: lista con la mejor racha de cada jugador.
-        let ranking = [];
-        let guardado = localStorage.getItem("rankingCartas");
-        if (guardado !== null) {
-            ranking = JSON.parse(guardado);
-        }
-
-        let encontrado = false;
-        for (let i = 0; i < ranking.length; i++) {
-            if (ranking[i].nombre === nombre) {
-                encontrado = true;
-                if (racha > ranking[i].racha) {
-                    ranking[i].racha = racha;
-                }
-            }
-        }
-        if (encontrado === false) {
-            ranking.push({ nombre: nombre, racha: racha });
-        }
-
-        localStorage.setItem("rankingCartas", JSON.stringify(ranking));
-    }
-}
-
 //compruba quien gano y el desempate.
 function jugarRonda() {
     if (puntosJugador1 >= 3 || puntosJugador2 >= 3) {
@@ -250,7 +175,7 @@ function elJugadorDescarta(cartaATirar) {
 }
 
 function turnoReinaRoja() {
-    //Descarta y roba 1 carta jugador2.
+    //Descarta y roba 1 carta Reina Roja.
     if (manoJugador2[0].numero === manoJugador2[1].numero) {
         puntosJugador2++;
         descartes.push(...manoJugador2);
@@ -306,12 +231,80 @@ function turnoReinaRoja() {
     jugarRonda();
 }
 
- jugarPartida();
-//Boton de nueva ronda.
-//let nuevaRonda = document.querySelector("#botonNuevaRonda");
-//nuevaRonda.addEventListener("click", function() {
-//jugarPartida();
-//});
+// Recicla las cartas descartadas cuando el mazo se agota.
+function reciclarMazo() {
+    if (mazoMezclado.length === 0) {
+        const cantidadDeCartas = descartes.length;
+        for (let i = 0; i < cantidadDeCartas; i++) {
+            let posicionAzar = Math.floor(Math.random() * descartes.length);
+            let cartaReciclada = descartes[posicionAzar];
+            descartes.splice(posicionAzar, 1);
+            mazoMezclado.push(cartaReciclada);
+        }
+    }
+}
+
+function robarCarta() {
+    // si el mazo está vacío, se rellena con los descartes.
+    reciclarMazo();
+    // saca la primera carta y la devuelve.             
+    return mazoMezclado.shift(); 
+}
+
+// Registra quién ganó: cuenta las victorias y lleva la racha de victorias seguidas.
+function registrarVictoria(ganador) {
+    if (ganador === "reina") {
+        // Ganó la Reina Roja: se suma su victoria y la racha del jugador se corta.
+        let totalReina = Number(localStorage.getItem("victoriasReina"));
+        localStorage.setItem("victoriasReina", totalReina + 1);
+        localStorage.setItem("rachaActualCartas", 0);
+    }
+    else {
+        // Ganó el jugador: se suma su victoria.
+        let totalJugador = Number(localStorage.getItem("victoriasJugador"));
+        localStorage.setItem("victoriasJugador", totalJugador + 1);
+
+        // La racha sigue solo si es la misma persona que la venía haciendo.
+        let racha = Number(localStorage.getItem("rachaActualCartas"));
+        let nombreDeLaRacha = localStorage.getItem("rachaNombreCartas");
+        if (nombreDeLaRacha === nombre) {
+            racha = racha + 1;
+        } else {
+            racha = 1;
+        }
+        localStorage.setItem("rachaActualCartas", racha);
+        localStorage.setItem("rachaNombreCartas", nombre);
+
+        // Récord general (la mejor racha de todos, con su nombre).
+        let recordRacha = Number(localStorage.getItem("recordRachaCartas"));
+        if (racha > recordRacha) {
+            localStorage.setItem("recordRachaCartas", racha);
+            localStorage.setItem("recordRachaCartasNombre", nombre);
+        }
+
+        // Ranking: lista con la mejor racha de cada jugador.
+        let ranking = [];
+        let guardado = localStorage.getItem("rankingCartas");
+        if (guardado !== null) {
+            ranking = JSON.parse(guardado);
+        }
+
+        let encontrado = false;
+        for (let i = 0; i < ranking.length; i++) {
+            if (ranking[i].nombre === nombre) {
+                encontrado = true;
+                if (racha > ranking[i].racha) {
+                    ranking[i].racha = racha;
+                }
+            }
+        }
+        if (encontrado === false) {
+            ranking.push({ nombre: nombre, racha: racha });
+        }
+
+        localStorage.setItem("rankingCartas", JSON.stringify(ranking));
+    }
+}
 
 function mostrarCartas() {
       let html = "";
@@ -345,6 +338,7 @@ function mostrarCartas() {
         html += etiquetaImagen;
         html += '</div>';
     }
+    
      html += '</div>';
     
     // El botón de nueva ronda.
@@ -354,15 +348,16 @@ function mostrarCartas() {
     // Pasa todo lo armado a la página.
     mesaDeJuego.innerHTML = html;
 
-    // El botón se crea de nuevo cada vez que se dibuja la mesa,
-    // así que hay que conectarle el clic acá.
+    // El botón se crea de nuevo cada vez y se le conectarle el clic acá.
     let nuevaRonda = document.querySelector("#botonNuevaRonda");
     nuevaRonda.addEventListener("click", function() {
         jugarPartida();
     });
 }
-
+//Muestra el puntaje del jugar y la de la Reina Roja.
 function mostrarPuntaje() {
     let textoPuntaje = nombre + ": " + puntosJugador1 + " - Reina Roja: " + puntosJugador2;
     puntajeCartas.innerHTML = textoPuntaje;
 }
+//Arranca la partida.
+ jugarPartida();
