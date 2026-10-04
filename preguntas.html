@@ -27,7 +27,7 @@
       <main>
         <h2>Reglas del Juego</h2>
         <p>El objetivo es conseguir la mayor cantidad de puntos posible. <br>
-          Se presentan <strong>10 preguntas</strong>, una por vez, con <strong>4 opciones</strong> de respuesta cada una.<br>
+         Se presentan <strong>10 preguntas</strong> de Verdadero o Falso, una por vez.<br>
           Tenés <strong>10 segundos</strong> para responder cada pregunta antes de que se acabe el tiempo.<br>
           Si respondés correctamente, sumás <strong>1 punto</strong>.<br>
           Si respondés mal, o se acaba el tiempo, se cuenta como un <strong>error</strong>.<br>
@@ -35,15 +35,16 @@
           Si respondés las 10 preguntas sin llegar a 3 errores, ¡ganaste la partida!<br>
         </p>
         <div id="juego-trivia">
+          <div id="categorias">
+            <p>Elegí una categoría para comenzar:</p>
+          </div>
           <p id="estado-partida">Pregunta <span id="numero-pregunta">1</span> de 10</p>
           <p id="timer">⏳ Tiempo: <span id="segundos">10</span>s</p>
-          <p id="pregunta-texto">Cargando pregunta...</p>
-          
+          <p id="pregunta-texto">Elegí una categoría para comenzar</p>
+
           <div id="opciones">
-            <button class="opcion-respuesta" type="button">Opción 1</button>
-            <button class="opcion-respuesta" type="button">Opción 2</button>
-            <button class="opcion-respuesta" type="button">Opción 3</button>
-            <button class="opcion-respuesta" type="button">Opción 4</button>
+            <button id="btn-verdadero" type="button" disabled>Verdadero</button>
+            <button id="btn-falso" type="button" disabled>Falso</button>
           </div>
           
           <p id="resultado-parcial">Puntos: <span id="puntos">0</span> | Errores: <span id="errores">0</span></p>
