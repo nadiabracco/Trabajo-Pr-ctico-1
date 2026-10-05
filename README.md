@@ -172,3 +172,17 @@ Trivia: temporizador de 10 segundos por pregunta: agrega presión y hace que cad
 Trivia: un solo temporizador a la vez: iniciarTemporizador() llama primero a detenerTemporizador() para que nunca haya dos cuentas regresivas corriendo juntas.
 Trivia: récord por puntaje: se guarda en localStorage y se muestra en la tabla de posiciones, igual que el resto de los juegos.
 Cartas: ranking de rachas en JSON: como hay un récord por jugador, se guarda un array de objetos con JSON.stringify() y se lee con JSON.parse(), porque localStorage solo guarda texto.
+
+Declaración de uso de Inteligencia Artificial
+Durante el desarrollo del trabajo utilizamos Claude (Anthropic) como herramienta de asistencia y consulta.
+A lo largo del desarrollo, utilizamos la herramienta principalmente para resolver dudas, consultar conceptos y orientarnos frente a distintos problemas que fueron surgiendo. En particular, nos resultó útil durante el desarrollo de JavaScript, tanto para comprender algunos conceptos como para organizar la lógica de los juegos y dividir problemas más complejos en partes más pequeñas.
+Uno de los principales usos se dio cuando aparecían errores o comportamientos que no sabíamos cómo resolver. En esos casos, explicábamos a Claude el problema que estábamos teniendo para comprender cuál podía ser su causa y qué alternativas de solución existían. A partir de esas explicaciones, adaptábamos las propuestas a nuestro propio código, realizábamos modificaciones y verificábamos su funcionamiento.
+También utilizamos la herramienta para consultar y repasar conceptos de CSS y JavaScript que no teníamos presentes, así como para comprender algunos aspectos relacionados con el uso de APIs y con la persistencia de datos mediante `localStorage`.
+- Nos ayudó a detectar y comprender errores que aparecieron durante el desarrollo de los juegos.
+- Nos orientó en la organización de la lógica de JavaScript y en la división de algunas funciones.
+- Nos ayudó a comprender cómo utilizar `localStorage` para guardar y recuperar información.
+- Nos permitió consultar y repasar conceptos de CSS, JavaScript y APIs.
+/ Modificaciones, correcciones y decisiones tomadas por el grupo
+Las reglas de los juegos, la temática del proyecto, el diseño y las decisiones sobre el funcionamiento de cada juego fueron definidas por el grupo.
+Las respuestas y propuestas de Claude fueron utilizadas como orientación y fueron adaptadas, modificadas o descartadas según las necesidades del proyecto. También verificamos las soluciones propuestas y realizamos las correcciones necesarias para integrarlas al código que estábamos desarrollando.
+De esta manera, utilizamos la IA como una herramienta de consulta, acompañamiento y orientación durante el proceso, manteniendo la responsabilidad sobre las decisiones, la implementación y la comprensión del código utilizado en la entrega.

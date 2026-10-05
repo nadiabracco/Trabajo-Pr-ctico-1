@@ -1,6 +1,5 @@
-// ==========================================
+
 // CONFIGURACIÓN
-// ==========================================
 
 const endpoint = "https://opentdb.com/api_category.php"; // guarda la URL de la API que da la lista de categorías
 
@@ -41,9 +40,7 @@ let tiempoRestante = TIEMPO_POR_PREGUNTA; // cuántos segundos quedan en la preg
 let temporizador = null; // por ahora no hay ningún reloj corriendo (se completa recién cuando arranca una pregunta)
 
 
-// ==========================================
 // LÓGICA PRINCIPAL
-// ==========================================
 
 // Función para traer las categorías desde la API
 // "async" le dice a JS que esta función va a esperar datos de internet
@@ -205,9 +202,8 @@ botonFalso.addEventListener("click", () => responder(false)); // cuando clickean
 botonReiniciarTrivia.addEventListener("click", reiniciarTrivia); // cuando clickean "Reiniciar", llama a reiniciarTrivia()
 
 
-// ==========================================
 // PREGUNTAS
-// ==========================================
+
 
 const preguntasArte = [ // array con las 10 preguntas de la categoría Arte
   { texto: "Leonardo Da Vinci pintó la Mona Lisa.", correcta: true }, // cada pregunta es un objeto: texto + si es verdadera o falsa
