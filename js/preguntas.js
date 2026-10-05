@@ -249,3 +249,4 @@ const preguntasPorCategoria = { // objeto que relaciona cada ID de categoría co
   11: preguntasCine, // si el id es 11, usar el array preguntasCine
   12: preguntasMusica // si el id es 12, usar el array preguntasMusica
 };
+

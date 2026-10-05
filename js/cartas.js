@@ -24,6 +24,7 @@ const mazo = [];
 const palos = ["oros", "copas", "espadas", "bastos"];
 const numeros = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12]; 
 
+//bucle de los palos
 for (let i = 0; i < 4; i++) {
     // recorre las posiciones del array numeros.
     for (let j = 0; j < 10; j++) {
@@ -41,29 +42,29 @@ console.log("Total de cartas: " + mazo.length);
 const cantidadDeCartas = mazo.length;
  mazoMezclado = [];
 for (let i = 0; i < cantidadDeCartas; i++) {
-    let posicionAzar = Math.floor(Math.random() * mazo.length); 
-    let cartaSorteada = mazo[posicionAzar];                     
-    mazo.splice(posicionAzar, 1);                                
-    mazoMezclado.push(cartaSorteada);                           
+    let posicionAzar = Math.floor(Math.random() * mazo.length); //posicion aleatoria del mazo
+    let cartaSorteada = mazo[posicionAzar]; // carta sorteada del mazo                    
+    mazo.splice(posicionAzar, 1);  //elimina la carta sorteada para que no se repita                            
+    mazoMezclado.push(cartaSorteada); //lo guarda en el mazo                        
 }
 console.log("Mazo mezclado:", mazoMezclado);
 
 //Puntos de los jugadores/ manos/ descartes/desempate de cartas.
  puntosJugador1 = 0;
  puntosJugador2 = 0;
- manoJugador1 = [];
- manoJugador2 = [];
+ manoJugador1 = []; //aca se van a guardar las dos cartas del jugador 1
+ manoJugador2 = []; //aca se van a guardar las dos cartas del jugador 2
  descartes = [];
  enDesempate = false; 
  mensajeFinal.innerHTML = "";
 
-//Reparte las cartas a los jugadores.
+//Reparte las cartas a los jugadores y descarta 
 for (let i = 0; i < 4; i++) {
     let cartaRepartida = mazoMezclado[0];
-    mazoMezclado.splice(0, 1);
+    mazoMezclado.splice(0, 1); //descarta la carta del mazo para que no se repita
 
     if (i < 2) {
-        manoJugador1.push(cartaRepartida);
+        manoJugador1.push(cartaRepartida); //reparte las dos primeras cartas
     }
     else {
         manoJugador2.push(cartaRepartida);
@@ -80,18 +81,18 @@ jugarRonda();
 
 //compruba quien gano y el desempate.
 function jugarRonda() {
-    if (puntosJugador1 >= 3 || puntosJugador2 >= 3) {
+    if (puntosJugador1 >= 3 || puntosJugador2 >= 3) {  //desempate
         if (puntosJugador1 >= 3 && puntosJugador2 >= 3) {
             enDesempate = true;
         }
-        else if (puntosJugador1 >= 3) {
+        else if (puntosJugador1 >= 3) { //si gana el usuario
             console.log("Ganó " + nombre);
             registrarVictoria("jugador");
             mensajeFinal.innerHTML = "Ganó " + nombre;
             esperandoDescarte = false;
             return;
         }
-        else if (puntosJugador2 >= 3) {
+        else if (puntosJugador2 >= 3) { //si gana la pc
             console.log("Ganó la Reina Roja");
             registrarVictoria("reina");
             mensajeFinal.innerHTML = "Ganó la Reina Roja";
@@ -101,7 +102,7 @@ function jugarRonda() {
     }
 
     //Descarta y roba 1 carta.
-    if (manoJugador1[0].numero === manoJugador1[1].numero) {
+    if (manoJugador1[0].numero === manoJugador1[1].numero) { //Comprueba si hay par y se suma punto
         puntosJugador1++;
         // las cartas del par van a descartes.
          descartes.push(manoJugador1[0]);  
@@ -110,7 +111,7 @@ function jugarRonda() {
         manoJugador1.push(robarCarta());
         manoJugador1.push(robarCarta());
 
-        if (enDesempate) {
+        if (enDesempate) { // Ganador del desempate 
             if (puntosJugador1 > puntosJugador2) {
                 console.log("Ganó " + nombre);
                 registrarVictoria("jugador");
@@ -121,12 +122,12 @@ function jugarRonda() {
                 return;
             }
         }
-        esperandoDescarte = false;
+        esperandoDescarte = false; //es el boton descarte, esta en false hasta que se presione descartar.
     }
     else {
         //boton descarte
         esperandoDescarte = true;
-        mostrarCartas();
+        mostrarCartas(); //muestra imagenes
         let boton0 = document.querySelector("#botonDescarte0");
         let boton1 = document.querySelector("#botonDescarte1");
         boton0.addEventListener("click", function() {
@@ -365,3 +366,5 @@ function mostrarPuntaje() {
 }
 //Arranca la partida.
  jugarPartida();
+
+ 
