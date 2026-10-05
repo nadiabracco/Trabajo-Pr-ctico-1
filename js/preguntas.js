@@ -2,233 +2,215 @@
 // CONFIGURACIÓN
 // ==========================================
 
-// URL de la API para traer la lista de categorías
-const endpoint = "https://opentdb.com/api_category.php";
+const endpoint = "https://opentdb.com/api_category.php"; // guarda la URL de la API que da la lista de categorías
 
-// Diccionario de traducción (fijo, no cambia nunca)
-const traduccionCategorias = {
+const traduccionCategorias = { // diccionario: nombre en inglés → traducción en español
   "Art": "Arte",
   "Entertainment: Film": "Cine",
   "Entertainment: Music": "Música"
 };
 
-// IDs de las categorías que usamos
-const idsElegidos = [25, 11, 12];
+const idsElegidos = [25, 11, 12]; // array con los IDs de las 3 categorías que vamos a usar
 
-// Segundos que tiene el jugador para responder cada pregunta
-const TIEMPO_POR_PREGUNTA = 10; 
+const TIEMPO_POR_PREGUNTA = 10; // valor fijo: le dice al código a qué número volver cada vez que se resetea el reloj
 
-// Elemento donde van a aparecer los botones de categoría
-const contenedorCategorias = document.querySelector("#categorias");
+const contenedorCategorias = document.querySelector("#categorias"); // agarra el <div> del HTML donde van a aparecer los botones de 
+// categoría, y después usamos .append() para ir metiendo cada botón adentro de esa caja, es lo que se ve
+let botonesCategorias = []; // array vacío donde vamos a ir guardando cada botón de categoría a medida que se crean
 
-// Array donde vamos a guardar los botones de categoría, para poder deshabilitarlos después
-let botonesCategorias = [];
+const elementoPregunta = document.querySelector("#pregunta-texto"); // agarra el <p> donde se muestra el texto de la pregunta
+const botonVerdadero = document.querySelector("#btn-verdadero"); // agarra el botón "Verdadero"
+const botonFalso = document.querySelector("#btn-falso"); // agarra el botón "Falso"
+const numeroPreguntaSpan = document.querySelector("#numero-pregunta"); // agarra el <span> que muestra en qué número de pregunta vamos
 
-// Elementos de la pregunta y opciones
-const elementoPregunta = document.querySelector("#pregunta-texto");
-const botonVerdadero = document.querySelector("#btn-verdadero");
-const botonFalso = document.querySelector("#btn-falso");
-const numeroPreguntaSpan = document.querySelector("#numero-pregunta");
+const puntosSpan = document.querySelector("#puntos"); // agarra el <span> que muestra los puntos
+const erroresSpan = document.querySelector("#errores"); // agarra el <span> que muestra los errores
 
-// Elementos de puntaje
-const puntosSpan = document.querySelector("#puntos");
-const erroresSpan = document.querySelector("#errores");
+const tiempoSpan = document.querySelector("#tiempo"); // agarra el <span> que muestra los segundos restantes
 
-// Elemento donde se muestra el tiempo que queda
-const tiempoSpan = document.querySelector("#tiempo");
+const botonReiniciarTrivia = document.querySelector("#reiniciar-trivia"); // agarra el botón "Reiniciar"
 
-// Elemento del botón reiniciar
-const botonReiniciarTrivia = document.querySelector("#reiniciar-trivia");
+let preguntasActuales = []; // array que va a guardar las 10 preguntas de la categoría que se elija
 
-// Variable que va a guardar las preguntas de la partida actual
-let preguntasActuales = [];
+let indice = 0; // en qué pregunta vamos ahora mismo (arranca en la primera, posición 0 del array)
 
-// Índice de la pregunta actual dentro de la lista
-let indice = 0;
+let puntos = 0; // contador de respuestas correctas
+let errores = 0; // contador de respuestas incorrectas
 
-// Contadores de la partida
-let puntos = 0;
-let errores = 0;
+let tiempoRestante = TIEMPO_POR_PREGUNTA; // cuántos segundos quedan en la pregunta actual (arranca en 10, copiando el valor fijo)
+let temporizador = null; // por ahora no hay ningún reloj corriendo (se completa recién cuando arranca una pregunta)
 
-// Segundos que le quedan a la pregunta actual
-let tiempoRestante = TIEMPO_POR_PREGUNTA;
-let temporizador = null;
 
 // ==========================================
 // LÓGICA PRINCIPAL
 // ==========================================
 
 // Función para traer las categorías desde la API
+// "async" le dice a JS que esta función va a esperar datos de internet
 async function traerCategorias() {
-  try {
-    const respuesta = await fetch(endpoint);
 
-    if (!respuesta.ok) {
-      throw new Error(`HTTP ${respuesta.status}`);
+  try { // "intentá" ejecutar este bloque; si algo falla, no rompas la página, anotá el error en el catch de abajo
+  
+  const respuesta = await fetch(endpoint);  // le pide los datos a la API (endpoint) y "await" = esperá a que fetch termine de traer la respuesta antes de seguir 
+
+    if (!respuesta.ok) { //"si la respuesta NO salió bien"
+      throw new Error(`HTTP ${respuesta.status}`); // "throw" = lanzar un error, El new error crea un error en mensaje ej respuesta.status:404
     }
 
-    const datos = await respuesta.json();
-    const todasLasCategorias = datos.trivia_categories;
+    const datos = await respuesta.json(); // "respuesta" es la respuesta q llegó de la API, no se puede usar directamente,.json() la convierte en un objeto de js que podemos leer y usar (con sus propiedades, como trivia_categories)
+    const todasLasCategorias = datos.trivia_categories; // guarda el array completo con las 24 categorías
 
-    // Filtro para quedarnos solo con 3
-    const categoriasElegidas = todasLasCategorias.filter((categoria) =>
-      idsElegidos.includes(categoria.id)
-    );
+    // Armamos a mano el array de categorías elegidas, recorriendo todasLasCategorias con un for clásico
+    let categoriasElegidas = []; // array vacío, donde vamos a ir guardando las categorías que coincidan
 
-    // Creamos un botón por cada categoría
-    categoriasElegidas.forEach((categoria) => {
-      const boton = document.createElement("button");
-      boton.type = "button";
-      boton.textContent = traduccionCategorias[categoria.name];
-      boton.addEventListener("click", () => elegirCategoria(categoria.id));
-      contenedorCategorias.append(boton);
-      botonesCategorias.push(boton); // guardamos el botón para poder deshabilitarlo después
+    for (let i = 0; i < todasLasCategorias.length; i++) { // recorre las 24 categorías, una por una, usando "i" como contador
+      let categoria = todasLasCategorias[i]; // guarda en "categoria" la categoría actual del recorrido
+
+      if (idsElegidos.includes(categoria.id)) { // si el id de esta categoría está en nuestro array idsElegidos
+        categoriasElegidas.push(categoria); // la agregamos al array de resultado
+      }
+    }
+
+    categoriasElegidas.forEach((categoria) => { // recorre cada una de las 3 categorías elegidas
+      const boton = document.createElement("button"); // crea un botón nuevo, vacío, desde cero
+      boton.type = "button"; // le dice que es un botón común (no de formulario)
+      boton.textContent = traduccionCategorias[categoria.name]; // le pone como texto la traducción al español
+      boton.addEventListener("click", () => elegirCategoria(categoria.id)); // cuando lo clickeen, ejecuta elegirCategoria con su id
+      contenedorCategorias.append(boton); // agrega (mete) el botón recién creado dentro del <div> de categorías
+      botonesCategorias.push(boton); // guarda el botón en el array, para poder deshabilitarlo más adelante
     });
 
-  } catch (error) {
-    console.log("Hubo un error al traer las categorías:", error);
+  } catch (error) { // "catch" = acá cae el código SI algo falló en el try (sin internet, error de la API, el throw de arriba, etc.)
+    console.log("Hubo un error al traer las categorías:", error); // muestra el error en la consola, para poder detectarlo
   }
 }
 
-// Arranca la cuenta regresiva de la pregunta actual
-function iniciarTemporizador() { 
-  detenerTemporizador(); 
-  tiempoRestante = TIEMPO_POR_PREGUNTA;
-  tiempoSpan.textContent = tiempoRestante;
+function iniciarTemporizador() { // función que arranca la cuenta regresiva de una pregunta
+  detenerTemporizador(); // primero frena cualquier cuenta regresiva anterior que pudiera seguir corriendo
+  tiempoRestante = TIEMPO_POR_PREGUNTA; // resetea el tiempo restante, volviendo a copiar el valor fijo (10)
+  tiempoSpan.textContent = tiempoRestante; // muestra ese 10 en pantalla
 
-  temporizador = setInterval(function () {
-    tiempoRestante -= 1;
-    tiempoSpan.textContent = tiempoRestante;
+  temporizador = setInterval(function () { // arranca un reloj que ejecuta esta función cada 1000ms (1 segundo), y guarda su identificador
+    tiempoRestante -= 1; // resta 1 segundo al tiempo restante
+    tiempoSpan.textContent = tiempoRestante; // actualiza el número visible en pantalla
 
-    // Si se acabó el tiempo, cuenta como respuesta incorrecta
-    if (tiempoRestante <= 0) {
-      responder(null);
+    if (tiempoRestante <= 0) { // si ya se llegó a 0 (o menos)
+      responder(null); // llama a responder() con "null", como si el jugador no hubiera elegido nada (cuenta como error)
     }
-  }, 1000);
+  }, 1000); // el 1000 significa "cada 1000 milisegundos", o sea, cada 1 segundo
 }
 
-// Frena la cuenta regresiva
-function detenerTemporizador() { 
-  clearInterval(temporizador);
+function detenerTemporizador() { // función que frena la cuenta regresiva
+  clearInterval(temporizador); // detiene el reloj que esté corriendo, usando el identificador guardado en "temporizador"
 }
 
-// Se ejecuta cuando el jugador clickea una categoría
-function elegirCategoria(idCategoria) {
-  preguntasActuales = preguntasPorCategoria[idCategoria];
-  indice = 0; // arrancamos desde la primera pregunta
+function elegirCategoria(idCategoria) { // se ejecuta cuando el jugador clickea un botón de categoría
+  preguntasActuales = preguntasPorCategoria[idCategoria]; // busca y guarda el array de preguntas de esa categoría puntual
 
-  // Habilita los botones de respuesta, ahora que ya hay una categoría elegida
-  botonVerdadero.disabled = false;
-  botonFalso.disabled = false;
+  indice = 0; // arranca desde la primera pregunta de ese array
 
-  // Deshabilita las categorías para que no se pueda cambiar a mitad de partida
-  botonesCategorias.forEach((boton) => {
-    boton.disabled = true;
+  botonVerdadero.disabled = false; // habilita el botón "Verdadero"
+  botonFalso.disabled = false; // habilita el botón "Falso"
+
+  botonesCategorias.forEach((boton) => { // recorre todos los botones de categoría guardados en el array
+    boton.disabled = true; // y los deshabilita, para que no se pueda cambiar de categoría a mitad de partida
   });
 
-  mostrarPregunta();
+  mostrarPregunta(); // muestra en pantalla la primera pregunta de la categoría recién elegida
 }
 
-// Muestra en pantalla la pregunta actual según el índice
-function mostrarPregunta() {
-  const preguntaActual = preguntasActuales[indice];
-  elementoPregunta.textContent = preguntaActual.texto;
-  numeroPreguntaSpan.textContent = indice + 1;
-    // Cada vez que aparece una pregunta, arranca el tiempo
-  iniciarTemporizador(); 
+function mostrarPregunta() { // función que pone en pantalla la pregunta actual
+  const preguntaActual = preguntasActuales[indice]; // agarra, del array, la pregunta que corresponde al índice actual
+
+  elementoPregunta.textContent = preguntaActual.texto; // muestra el texto de esa pregunta en pantalla
+  numeroPreguntaSpan.textContent = indice + 1; // muestra el número de pregunta (+1 porque el índice arranca en 0, no en 1)
+
+  iniciarTemporizador(); // arranca el reloj de 10 segundos para esta nueva pregunta
 }
 
-// Se ejecuta cuando el jugador clickea Verdadero o Falso
-function responder(eleccionUsuario) {
-    detenerTemporizador();
-  const preguntaActual = preguntasActuales[indice];
+function responder(eleccionUsuario) { // se ejecuta cuando el jugador clickea Verdadero, Falso, o se acaba el tiempo
+  detenerTemporizador(); // frena el reloj, ya sea porque respondió o porque se acabó el tiempo
 
-  // Suma punto o error según si acertó o no
-  if (eleccionUsuario === preguntaActual.correcta) {
-    puntos += 1;
-  } else {
-    errores += 1;
+  const preguntaActual = preguntasActuales[indice]; // agarra la pregunta actual, para comparar contra la respuesta correcta
+
+  if (eleccionUsuario === preguntaActual.correcta) { // si lo que eligió el jugador coincide con la respuesta correcta
+    puntos += 1; // suma 1 punto
+  } else { // si no coincide (o si eleccionUsuario era null, por tiempo agotado)
+    errores += 1; // suma 1 error
   }
 
-  // Actualiza el puntaje visible en pantalla
-  puntosSpan.textContent = puntos;
-  erroresSpan.textContent = errores;
+  puntosSpan.textContent = puntos; // actualiza los puntos visibles en pantalla
+  erroresSpan.textContent = errores; // actualiza los errores visibles en pantalla
 
-  avanzar();
+  avanzar(); // decide qué pasa a continuación (siguiente pregunta, o fin de partida)
 }
-// Guarda el mejor puntaje de la trivia, solo si supera al anterior
-function guardarRecordTrivia() { 
-  const recordAnterior = Number(localStorage.getItem("recordTrivia")) || 0;
 
-  if (puntos > recordAnterior) {
-    localStorage.setItem("recordTrivia", puntos);
-    localStorage.setItem("recordTriviaNombre", localStorage.getItem("nombre"));
+function guardarRecordTrivia() { // función que guarda el mejor puntaje en localStorage
+  const recordAnterior = Number(localStorage.getItem("recordTrivia")) || 0; // busca el récord guardado anteriormente (o 0 si todavía no hay ninguno)
+
+  if (puntos > recordAnterior) { // si el puntaje de esta partida es mejor que el récord anterior
+    localStorage.setItem("recordTrivia", puntos); // guarda este nuevo puntaje como récord
+    localStorage.setItem("recordTriviaNombre", localStorage.getItem("nombre")); // guarda también el nombre del jugador que lo logró
   }
 }
 
-// Decide si la partida termina (por errores o por completar las 10 preguntas) o si pasa a la siguiente
-function avanzar() {
-  // Si ya llegó a 3 errores, termina la partida
-  if (errores >= 3) {
-    elementoPregunta.textContent = "¡Partida terminada! Llegaste a 3 errores.";
-    botonVerdadero.disabled = true;
-    botonFalso.disabled = true;
-    guardarRecordTrivia();
-    return;
+function avanzar() { // función que decide si la partida sigue, termina por errores, o termina por victoria
+  if (errores >= 3) { // si ya se llegó a 3 errores o más
+    elementoPregunta.textContent = "¡Partida terminada! Llegaste a 3 errores."; // muestra el mensaje de derrota
+    botonVerdadero.disabled = true; // deshabilita el botón Verdadero
+    botonFalso.disabled = true; // deshabilita el botón Falso
+    guardarRecordTrivia(); // guarda el puntaje final, por si resultó ser un nuevo récord
+    return; // corta la función acá, no ejecuta nada más abajo
   }
 
-  indice += 1;
+  indice += 1; // si no hubo 3 errores, avanza al índice de la siguiente pregunta
 
-  // Si ya respondió las 10 preguntas, ganó
-  if (indice >= preguntasActuales.length) {
-    elementoPregunta.textContent = "¡Ganaste la partida! Completaste las 10 preguntas.";
-    botonVerdadero.disabled = true;
-    botonFalso.disabled = true;
-    guardarRecordTrivia(); 
-    return;
+  if (indice >= preguntasActuales.length) { // si el índice ya superó la cantidad de preguntas que había (o sea, se acabaron)
+    elementoPregunta.textContent = "¡Ganaste la partida! Completaste las 10 preguntas."; // muestra el mensaje de victoria
+    botonVerdadero.disabled = true; // deshabilita el botón Verdadero
+    botonFalso.disabled = true; // deshabilita el botón Falso
+    guardarRecordTrivia(); // guarda el puntaje final, por si resultó ser un nuevo récord
+    return; // corta la función acá
   }
 
-  mostrarPregunta();
+  mostrarPregunta(); // si no terminó por ninguna de las dos razones, muestra la siguiente pregunta
 }
 
-// Vuelve el juego al estado inicial
-function reiniciarTrivia() {
-   // Frena el tiempo y vuelve a mostrar los 10 segundos
-  detenerTemporizador(); 
-  tiempoSpan.textContent = TIEMPO_POR_PREGUNTA; 
-  puntos = 0;
-  errores = 0;
-  indice = 0;
-  preguntasActuales = [];
+function reiniciarTrivia() { // función que vuelve todo el juego al estado inicial
+  detenerTemporizador(); // frena cualquier cuenta regresiva que esté corriendo
+  tiempoSpan.textContent = TIEMPO_POR_PREGUNTA; // vuelve a mostrar 10 segundos en pantalla
 
-  puntosSpan.textContent = puntos;
-  erroresSpan.textContent = errores;
-  numeroPreguntaSpan.textContent = 1;
-  elementoPregunta.textContent = "Elegí una categoría para comenzar";
+  puntos = 0; // resetea los puntos a 0
+  errores = 0; // resetea los errores a 0
+  indice = 0; // vuelve al índice de la primera pregunta
+  preguntasActuales = []; // vacía el array de preguntas de la partida anterior
 
-  // Vuelven a deshabilitarse hasta que se elija una categoría de nuevo
-  botonVerdadero.disabled = true;
-  botonFalso.disabled = true;
+  puntosSpan.textContent = puntos; // actualiza el 0 de puntos en pantalla
+  erroresSpan.textContent = errores; // actualiza el 0 de errores en pantalla
+  numeroPreguntaSpan.textContent = 1; // vuelve a mostrar "Pregunta 1"
+  elementoPregunta.textContent = "Elegí una categoría para comenzar"; // vuelve a mostrar el mensaje inicial
 
-  // Vuelve a habilitar las categorías para poder elegir de nuevo
-  botonesCategorias.forEach((boton) => {
-    boton.disabled = false;
+  botonVerdadero.disabled = true; // deshabilita el botón Verdadero, hasta que se elija categoría de nuevo
+  botonFalso.disabled = true; // deshabilita el botón Falso, hasta que se elija categoría de nuevo
+
+  botonesCategorias.forEach((boton) => { // recorre todos los botones de categoría
+    boton.disabled = false; // y los vuelve a habilitar, para poder elegir de nuevo
   });
 }
 
-traerCategorias();
+traerCategorias(); // llama a la función, para que arranque a traer las categorías apenas carga la página
 
-botonVerdadero.addEventListener("click", () => responder(true));
-botonFalso.addEventListener("click", () => responder(false));
-botonReiniciarTrivia.addEventListener("click", reiniciarTrivia);
+botonVerdadero.addEventListener("click", () => responder(true)); // cuando clickean "Verdadero", llama a responder(true)
+botonFalso.addEventListener("click", () => responder(false)); // cuando clickean "Falso", llama a responder(false)
+botonReiniciarTrivia.addEventListener("click", reiniciarTrivia); // cuando clickean "Reiniciar", llama a reiniciarTrivia()
 
 
 // ==========================================
 // PREGUNTAS
 // ==========================================
 
-const preguntasArte = [
-  { texto: "Leonardo Da Vinci pintó la Mona Lisa.", correcta: true },
+const preguntasArte = [ // array con las 10 preguntas de la categoría Arte
+  { texto: "Leonardo Da Vinci pintó la Mona Lisa.", correcta: true }, // cada pregunta es un objeto: texto + si es verdadera o falsa
   { texto: "Pablo Picasso fue un escultor, pero nunca pintó cuadros.", correcta: false },
   { texto: "La Capilla Sixtina fue pintada por Miguel Ángel.", correcta: true },
   { texto: "Vincent van Gogh vendió cientos de cuadros en vida.", correcta: false },
@@ -240,7 +222,7 @@ const preguntasArte = [
   { texto: "\"El grito\" fue pintado por Edvard Munch.", correcta: true },
 ];
 
-const preguntasCine = [
+const preguntasCine = [ // array con las 10 preguntas de la categoría Cine
   { texto: "\"Titanic\" fue dirigida por James Cameron.", correcta: true },
   { texto: "Walt Disney nunca ganó un premio Óscar.", correcta: false },
   { texto: "\"El Padrino\" está basada en una novela.", correcta: true },
@@ -253,7 +235,7 @@ const preguntasCine = [
   { texto: "Los hermanos Lumière inventaron el cine sonoro.", correcta: false },
 ];
 
-const preguntasMusica = [
+const preguntasMusica = [ // array con las 10 preguntas de la categoría Música
   { texto: "Mozart fue un compositor del período clásico.", correcta: true },
   { texto: "Los Beatles eran un grupo de España.", correcta: false },
   { texto: "Beethoven compuso música aun después de quedarse sordo.", correcta: true },
@@ -266,9 +248,8 @@ const preguntasMusica = [
   { texto: "Michael Jackson fue apodado el \"Rey del Pop\".", correcta: true },
 ];
 
-// Relaciona el ID de categoría con su lista de preguntas correspondiente
-const preguntasPorCategoria = {
-  25: preguntasArte,
-  11: preguntasCine,
-  12: preguntasMusica
+const preguntasPorCategoria = { // objeto que relaciona cada ID de categoría con su array de preguntas correspondiente
+  25: preguntasArte, // si el id es 25, usar el array preguntasArte
+  11: preguntasCine, // si el id es 11, usar el array preguntasCine
+  12: preguntasMusica // si el id es 12, usar el array preguntasMusica
 };
