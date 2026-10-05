@@ -104,7 +104,8 @@ function jugarRonda() {
     if (manoJugador1[0].numero === manoJugador1[1].numero) {
         puntosJugador1++;
         // las cartas del par van a descartes.
-        descartes.push(...manoJugador1);
+         descartes.push(manoJugador1[0]);  
+        descartes.push(manoJugador1[1]);  
         manoJugador1 = [];
         manoJugador1.push(robarCarta());
         manoJugador1.push(robarCarta());
@@ -151,7 +152,8 @@ function elJugadorDescarta(cartaATirar) {
     //Comprueba si la carta nueva forma par.
     if (manoJugador1[0].numero === manoJugador1[1].numero) {
         puntosJugador1++;
-        descartes.push(...manoJugador1);
+         descartes.push(manoJugador1[0]);  
+        descartes.push(manoJugador1[1]);
         manoJugador1 = [];
         manoJugador1.push(robarCarta());
         manoJugador1.push(robarCarta());
@@ -178,7 +180,8 @@ function turnoReinaRoja() {
     //Descarta y roba 1 carta Reina Roja.
     if (manoJugador2[0].numero === manoJugador2[1].numero) {
         puntosJugador2++;
-        descartes.push(...manoJugador2);
+         descartes.push(manoJugador2[0]); 
+        descartes.push(manoJugador2[1]);  
         manoJugador2 = [];
         manoJugador2.push(robarCarta());
         manoJugador2.push(robarCarta());
@@ -204,7 +207,8 @@ function turnoReinaRoja() {
 
         if (manoJugador2[0].numero === manoJugador2[1].numero) {
             puntosJugador2++;
-            descartes.push(...manoJugador2);
+              descartes.push(manoJugador2[0]); 
+             descartes.push(manoJugador2[1]); 
             manoJugador2 = [];
             manoJugador2.push(robarCarta());
             manoJugador2.push(robarCarta());

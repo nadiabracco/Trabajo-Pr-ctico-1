@@ -1,6 +1,5 @@
-// ==========================================
+
 // CONFIGURACIÓN
-// ==========================================
 
 // URL de la API para traer la lista de categorías
 const endpoint = "https://opentdb.com/api_category.php";
@@ -54,9 +53,7 @@ let errores = 0;
 let tiempoRestante = TIEMPO_POR_PREGUNTA;
 let temporizador = null;
 
-// ==========================================
 // LÓGICA PRINCIPAL
-// ==========================================
 
 // Función para traer las categorías desde la API
 async function traerCategorias() {
@@ -223,9 +220,8 @@ botonFalso.addEventListener("click", () => responder(false));
 botonReiniciarTrivia.addEventListener("click", reiniciarTrivia);
 
 
-// ==========================================
 // PREGUNTAS
-// ==========================================
+
 
 const preguntasArte = [
   { texto: "Leonardo Da Vinci pintó la Mona Lisa.", correcta: true },
