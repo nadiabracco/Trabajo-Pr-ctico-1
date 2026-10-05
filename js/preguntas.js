@@ -21,6 +21,9 @@ const TIEMPO_POR_PREGUNTA = 10;
 // Elemento donde van a aparecer los botones de categoría
 const contenedorCategorias = document.querySelector("#categorias");
 
+// Array donde vamos a guardar los botones de categoría, para poder deshabilitarlos después
+let botonesCategorias = [];
+
 // Elementos de la pregunta y opciones
 const elementoPregunta = document.querySelector("#pregunta-texto");
 const botonVerdadero = document.querySelector("#btn-verdadero");
@@ -79,6 +82,7 @@ async function traerCategorias() {
       boton.textContent = traduccionCategorias[categoria.name];
       boton.addEventListener("click", () => elegirCategoria(categoria.id));
       contenedorCategorias.append(boton);
+      botonesCategorias.push(boton); // guardamos el botón para poder deshabilitarlo después
     });
 
   } catch (error) {
@@ -116,6 +120,11 @@ function elegirCategoria(idCategoria) {
   // Habilita los botones de respuesta, ahora que ya hay una categoría elegida
   botonVerdadero.disabled = false;
   botonFalso.disabled = false;
+
+  // Deshabilita las categorías para que no se pueda cambiar a mitad de partida
+  botonesCategorias.forEach((boton) => {
+    boton.disabled = true;
+  });
 
   mostrarPregunta();
 }
@@ -200,6 +209,11 @@ function reiniciarTrivia() {
   // Vuelven a deshabilitarse hasta que se elija una categoría de nuevo
   botonVerdadero.disabled = true;
   botonFalso.disabled = true;
+
+  // Vuelve a habilitar las categorías para poder elegir de nuevo
+  botonesCategorias.forEach((boton) => {
+    boton.disabled = false;
+  });
 }
 
 traerCategorias();
